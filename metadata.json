@@ -1,0 +1,6 @@
+{
+  "name": "Rosewood Duct Cleaning",
+  "description": "Professional Air Duct, Dryer Vent, HVAC & Chimney Cleaning Services. Cleaner Air, Healthier Spaces for your home.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
