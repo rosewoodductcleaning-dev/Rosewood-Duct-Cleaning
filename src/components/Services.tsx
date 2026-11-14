@@ -74,7 +74,7 @@ export const Services: React.FC<ServicesProps> = ({ onSelectService }) => {
           'Industrial HEPA negative-air vacuum system (99.97% filtration down to 0.3 microns)',
           'High-velocity pneumatic air sweep whips',
         ],
-        duration: '2.5 - 4 hours (based on home square footage and number of vents)',
+        duration: '1 – 1.5 hours',
         recommendedFrequency: 'Every 6 months to 1 year',
         pricingNote: 'Transparent flat-rate pricing based on your system size with zero hidden add-ons.',
       },
