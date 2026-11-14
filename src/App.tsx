@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Services } from './components/Services';
@@ -17,10 +17,27 @@ import { FAQSection } from './components/FAQSection';
 import { Footer } from './components/Footer';
 import { BookingModal } from './components/BookingModal';
 import { FloatingQuickActions } from './components/FloatingQuickActions';
+import { TermsConditionsPage, PrivacyPolicyPage } from './components/LegalPages';
 import { ServiceType } from './types';
 import { Instagram, Calendar } from 'lucide-react';
 
+type ActivePage = 'home' | 'terms' | 'privacy';
+
+function resolvePageFromUrl(): ActivePage {
+  if (typeof window === 'undefined') return 'home';
+  const path = window.location.pathname.replace(/\/+$/, '').toLowerCase();
+  const hash = window.location.hash.toLowerCase();
+  if (path === '/terms-and-conditions' || hash === '#/terms-and-conditions') {
+    return 'terms';
+  }
+  if (path === '/privacy-policy' || hash === '#/privacy-policy') {
+    return 'privacy';
+  }
+  return 'home';
+}
+
 export default function App() {
+  const [activePage, setActivePage] = useState<ActivePage>(() => resolvePageFromUrl());
   const [selectedService, setSelectedService] = useState<ServiceType>('Air Duct Cleaning');
   const [prefilledZip, setPrefilledZip] = useState<string | undefined>(undefined);
   
@@ -29,7 +46,25 @@ export default function App() {
   const [modalService, setModalService] = useState<ServiceType>('Air Duct Cleaning');
   const [modalAddress, setModalAddress] = useState<string>('');
 
-  const scrollToSection = (sectionId: string) => {
+  useEffect(() => {
+    const handlePopState = () => {
+      setActivePage(resolvePageFromUrl());
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const navigateToLegalPage = (page: 'terms' | 'privacy') => {
+    const targetPath = page === 'terms' ? '/terms-and-conditions' : '/privacy-policy';
+    if (window.location.pathname !== targetPath) {
+      window.history.pushState(null, '', targetPath);
+    }
+    setActivePage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const scrollToElement = (sectionId: string) => {
     const el = document.getElementById(sectionId);
     if (el) {
       const navOffset = 80;
@@ -43,6 +78,25 @@ export default function App() {
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    if (activePage !== 'home') {
+      window.history.pushState(null, '', '/');
+      setActivePage('home');
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (sectionId === 'home') {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          } else {
+            scrollToElement(sectionId);
+          }
+        });
+      });
+      return;
+    }
+
+    scrollToElement(sectionId);
   };
 
   // Open the dedicated Booking Popup Modal from any trigger
@@ -69,41 +123,57 @@ export default function App() {
 
       {/* Main Content Sections */}
       <main className="flex-1 pb-24 lg:pb-0">
-        {/* 2. Hero Section */}
-        <Hero
-          onBookClick={() => openBookingModal()}
-          onExploreServicesClick={() => scrollToSection('services')}
-        />
+        {activePage === 'terms' ? (
+          <TermsConditionsPage
+            onBackHome={() => scrollToSection('home')}
+            onNavigateLegal={navigateToLegalPage}
+            onOpenBooking={() => openBookingModal()}
+          />
+        ) : activePage === 'privacy' ? (
+          <PrivacyPolicyPage
+            onBackHome={() => scrollToSection('home')}
+            onNavigateLegal={navigateToLegalPage}
+            onOpenBooking={() => openBookingModal()}
+          />
+        ) : (
+          <>
+            {/* 2. Hero Section */}
+            <Hero
+              onBookClick={() => openBookingModal()}
+              onExploreServicesClick={() => scrollToSection('services')}
+            />
 
-        {/* 3. Our Services – All Four Service Cards */}
-        <Services onSelectService={(serv) => openBookingModal(serv)} />
+            {/* 3. Our Services – All Four Service Cards */}
+            <Services onSelectService={(serv) => openBookingModal(serv)} />
 
-        {/* 4. Check Availability / ZIP Code Section */}
-        <ZipChecker onProceedToBookingWithZip={(zip) => openBookingModal(undefined, zip)} />
+            {/* 4. Check Availability / ZIP Code Section */}
+            <ZipChecker onProceedToBookingWithZip={(zip) => openBookingModal(undefined, zip)} />
 
-        {/* 5. About Us Section */}
-        <AboutUs onBookClick={() => openBookingModal()} />
+            {/* 5. About Us Section */}
+            <AboutUs onBookClick={() => openBookingModal()} />
 
-        {/* 6. Why Choose Rosewood Section */}
-        <WhyChooseRosewood />
+            {/* 6. Why Choose Rosewood Section */}
+            <WhyChooseRosewood />
 
-        {/* 7. Customer Testimonials */}
-        <Testimonials />
+            {/* 7. Customer Testimonials */}
+            <Testimonials />
 
-        {/* 8. Online Booking Section (Direct On-Page Interface) */}
-        <BookingForm
-          selectedService={selectedService}
-          prefilledZip={prefilledZip}
-          onServiceChange={(serv) => setSelectedService(serv)}
-        />
+            {/* 8. Online Booking Section (Direct On-Page Interface) */}
+            <BookingForm
+              selectedService={selectedService}
+              prefilledZip={prefilledZip}
+              onServiceChange={(serv) => setSelectedService(serv)}
+            />
 
-        {/* 9. Interactive USA Service Coverage Map */}
-        <ServiceCoverageMap
-          onBookNow={(serv, locationText) => openBookingModal(serv, locationText)}
-        />
+            {/* 9. Interactive USA Service Coverage Map */}
+            <ServiceCoverageMap
+              onBookNow={(serv, locationText) => openBookingModal(serv, locationText)}
+            />
 
-        {/* 10. Premium FAQ Section */}
-        <FAQSection onOpenBooking={() => openBookingModal()} />
+            {/* 10. Premium FAQ Section */}
+            <FAQSection onOpenBooking={() => openBookingModal()} />
+          </>
+        )}
       </main>
 
       {/* 10. Dark Walnut Brown Footer */}
@@ -111,6 +181,7 @@ export default function App() {
         onNavigate={scrollToSection}
         onSelectService={(serv) => openBookingModal(serv)}
         onOpenBooking={() => openBookingModal()}
+        onNavigateLegal={navigateToLegalPage}
       />
 
       {/* Mobile Sticky Quick Action Bar (Instagram DM & Book Service) */}

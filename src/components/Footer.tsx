@@ -6,9 +6,10 @@ interface FooterProps {
   onNavigate: (sectionId: string) => void;
   onSelectService: (service: ServiceType) => void;
   onOpenBooking?: () => void;
+  onNavigateLegal?: (page: 'terms' | 'privacy') => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onNavigate, onSelectService, onOpenBooking }) => {
+export const Footer: React.FC<FooterProps> = ({ onNavigate, onSelectService, onOpenBooking, onNavigateLegal }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -148,7 +149,36 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onSelectService, onO
 
         {/* Bottom Bar: Copyright & Back to Top */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#F6F0E7]/60">
-          <p>© {new Date().getFullYear()} Rosewood Duct Cleaning. All Rights Reserved. Clean Air • Healthier Spaces.</p>
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-left">
+            <p>© {new Date().getFullYear()} Rosewood Duct Cleaning. All Rights Reserved. Clean Air • Healthier Spaces.</p>
+            <div className="flex items-center gap-3 text-[#F6F0E7]/80">
+              <a
+                href="/terms-and-conditions"
+                onClick={(e) => {
+                  if (onNavigateLegal) {
+                    e.preventDefault();
+                    onNavigateLegal('terms');
+                  }
+                }}
+                className="hover:text-[#D94D78] underline underline-offset-4 transition-colors font-semibold"
+              >
+                Terms &amp; Conditions
+              </a>
+              <span aria-hidden="true" className="text-[#F6F0E7]/35">•</span>
+              <a
+                href="/privacy-policy"
+                onClick={(e) => {
+                  if (onNavigateLegal) {
+                    e.preventDefault();
+                    onNavigateLegal('privacy');
+                  }
+                }}
+                className="hover:text-[#D94D78] underline underline-offset-4 transition-colors font-semibold"
+              >
+                Privacy Policy
+              </a>
+            </div>
+          </div>
 
           <button
             onClick={scrollToTop}

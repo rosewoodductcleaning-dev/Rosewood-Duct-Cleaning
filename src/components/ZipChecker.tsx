@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Search, CheckCircle2, AlertCircle, ArrowRight, Sparkles, Navigation, Clock, ShieldCheck, Truck } from 'lucide-react';
+import { MapPin, Search, CheckCircle2, AlertCircle, ArrowRight, Sparkles, Navigation, Clock, ShieldCheck } from 'lucide-react';
 
 interface ZipCheckerProps {
   onProceedToBookingWithZip: (zip: string) => void;
@@ -36,11 +36,6 @@ export const ZipChecker: React.FC<ZipCheckerProps> = ({ onProceedToBookingWithZi
       icon: <Clock className="w-4 h-4 text-[#D94D78] shrink-0" />,
       title: 'Same-Day & Next-Day Dispatch',
       desc: 'Live mobile routing across metropolitan neighborhoods.',
-    },
-    {
-      icon: <Truck className="w-4 h-4 text-[#D94D78] shrink-0" />,
-      title: '50-Mile Radius Service Perimeter',
-      desc: 'Direct-to-home service with zero travel surcharges.',
     },
     {
       icon: <ShieldCheck className="w-4 h-4 text-[#D94D78] shrink-0" />,
