@@ -1,5 +1,6 @@
 import React from 'react';
 import { UserCheck, Wind, Award, CheckCircle2, ShieldCheck } from 'lucide-react';
+import technicianUniformImg from '../assets/images/technician_rosewood_uniform_1794350315081.jpg';
 
 export const WhyChooseRosewood: React.FC = () => {
   const benefitCards = [
@@ -60,7 +61,7 @@ export const WhyChooseRosewood: React.FC = () => {
             <div className="block lg:hidden mb-8 w-full max-w-md mx-auto">
               <div className="relative rounded-2xl overflow-hidden border-4 border-white shadow-xl bg-white">
                 <img
-                  src="/src/assets/images/technician_rosewood_uniform_1794350315081.jpg"
+                  src={technicianUniformImg}
                   alt="Professional Rosewood Duct Cleaning Technician in Dark Walnut Uniform"
                   className="w-full h-[360px] sm:h-[420px] object-cover object-top"
                   loading="lazy"
@@ -131,7 +132,7 @@ export const WhyChooseRosewood: React.FC = () => {
               {/* Main Technician Image Container */}
               <div className="relative rounded-[28px] overflow-hidden border-4 border-white shadow-2xl bg-white group">
                 <img
-                  src="/src/assets/images/technician_rosewood_uniform_1794350315081.jpg"
+                  src={technicianUniformImg}
                   alt="Professional Rosewood Duct Cleaning Technician in Dark Walnut Uniform with Brand Logo"
                   className="w-full h-[520px] object-cover object-top group-hover:scale-102 transition-transform duration-500"
                   loading="lazy"

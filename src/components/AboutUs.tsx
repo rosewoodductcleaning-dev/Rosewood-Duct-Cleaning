@@ -1,5 +1,6 @@
 import React from 'react';
 import { Award, Leaf, ShieldCheck, ArrowRight } from 'lucide-react';
+import aboutTeamImg from '../assets/images/about_team_unbranded_1794498025584.jpg';
 
 interface AboutUsProps {
   onBookClick: () => void;
@@ -17,7 +18,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ onBookClick }) => {
           <div className="lg:col-span-6 relative">
             <div className="relative rounded-2xl sm:rounded-[32px] overflow-hidden border-2 border-[#75401F]/20 shadow-xl bg-[#F6F0E7] group">
               <img
-                src="/src/assets/images/about_team_unbranded_1794498025584.jpg"
+                src={aboutTeamImg}
                 alt="Rosewood Duct Cleaning professional technicians and HEPA equipment"
                 className="w-full h-[280px] xs:h-[360px] sm:h-[480px] object-cover object-center group-hover:scale-102 transition-transform duration-700 ease-out"
                 loading="lazy"

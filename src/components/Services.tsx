@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Wind, Flame, Fan, Home, ArrowUpRight, CheckCircle2, Info, X, Shield, Clock, Wrench } from 'lucide-react';
 import { ServiceType } from '../types';
+import airDuctCleanerImg from '../assets/images/air_duct_cleaner_unbranded_1794498022677.jpg';
+import dryerVentCleanerImg from '../assets/images/dryer_vent_cleaner_unbranded_1794498023203.jpg';
+import hvacCleanerImg from '../assets/images/hvac_cleaner_unbranded_1794498024504.jpg';
+import chimneySweepImg from '../assets/images/chimney_sweep_unbranded_1794498024784.jpg';
 
 interface ServicesProps {
   onSelectService: (service: ServiceType) => void;
@@ -45,7 +49,7 @@ export const Services: React.FC<ServicesProps> = ({ onSelectService }) => {
       number: '01',
       title: 'Air Duct Cleaning',
       category: 'Whole-Home Air Sanitation',
-      image: '/src/assets/images/air_duct_cleaner_unbranded_1794498022677.jpg',
+      image: airDuctCleanerImg,
       description:
         'Improve your indoor air quality with professional air duct cleaning. Remove accumulated dust, pet dander, debris, and airborne allergens from your supply and return vents.',
       keyBenefits: [
@@ -80,7 +84,7 @@ export const Services: React.FC<ServicesProps> = ({ onSelectService }) => {
       number: '02',
       title: 'Dryer Vent Cleaning',
       category: 'Fire Hazard & Efficiency Care',
-      image: '/src/assets/images/dryer_vent_cleaner_unbranded_1794498023203.jpg',
+      image: dryerVentCleanerImg,
       description:
         'Help improve dryer efficiency, cut utility costs, and eliminate hazardous flammable lint buildup with our comprehensive professional dryer vent cleaning service.',
       keyBenefits: [
@@ -114,7 +118,7 @@ export const Services: React.FC<ServicesProps> = ({ onSelectService }) => {
       number: '03',
       title: 'HVAC Cleaning',
       category: 'Unit Integrity & Airflow',
-      image: '/src/assets/images/hvac_cleaner_unbranded_1794498024504.jpg',
+      image: hvacCleanerImg,
       description:
         'Keep your heating and cooling equipment running at peak performance. Deep cleaning for evaporator coils, blower fan wheels, condensation pans, and internal cabinet housing.',
       keyBenefits: [
@@ -148,7 +152,7 @@ export const Services: React.FC<ServicesProps> = ({ onSelectService }) => {
       number: '04',
       title: 'Chimney Cleaning',
       category: 'Flue Safety & Soot Removal',
-      image: '/src/assets/images/chimney_sweep_unbranded_1794498024784.jpg',
+      image: chimneySweepImg,
       description:
         'Keep your fireplace and chimney safer and clean. Thorough soot, creosote, and obstruction removal with a complete zero-mess hearth containment guarantee.',
       keyBenefits: [

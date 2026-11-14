@@ -1,5 +1,9 @@
 import React from 'react';
 import { Instagram, Calendar, Wind, Gauge, ShieldCheck, Sparkles, CheckCircle2 } from 'lucide-react';
+import heroHvacBackdropImg from '../assets/images/hero_hvac_backdrop_1794348656347.jpg';
+import airDuctCleanerImg from '../assets/images/air_duct_cleaner_unbranded_1794498022677.jpg';
+import dryerVentCleanerImg from '../assets/images/dryer_vent_cleaner_unbranded_1794498023203.jpg';
+import hvacCleanerImg from '../assets/images/hvac_cleaner_unbranded_1794498024504.jpg';
 
 interface HeroProps {
   onBookClick: () => void;
@@ -22,7 +26,7 @@ export const Hero: React.FC<HeroProps> = ({ onBookClick }) => {
       {/* 1. Full-Width Darkened HVAC Ductwork Background */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <img
-          src="/src/assets/images/hero_hvac_backdrop_1794348656347.jpg"
+          src={heroHvacBackdropImg}
           alt="HVAC Ventilation Duct System"
           className="w-full h-full object-cover object-center scale-105"
           loading="eager"
@@ -120,7 +124,7 @@ export const Hero: React.FC<HeroProps> = ({ onBookClick }) => {
               {/* Image 1: Main Feature (Air Duct Cleaning with Unbranded Dark Uniform) */}
               <div className="relative w-full h-[210px] xs:h-[240px] sm:h-[270px] lg:h-[280px] rounded-2xl overflow-hidden border-3 sm:border-4 border-white shadow-2xl group bg-[#542B16]">
                 <img
-                  src="/src/assets/images/air_duct_cleaner_unbranded_1794498022677.jpg"
+                  src={airDuctCleanerImg}
                   alt="Professional Air Duct Cleaning with Rotary Brush"
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                   loading="eager"
@@ -152,7 +156,7 @@ export const Hero: React.FC<HeroProps> = ({ onBookClick }) => {
                 {/* Image 2: Dryer Vent Cleaning (Unbranded Uniform) */}
                 <div className="relative w-full h-[140px] xs:h-[165px] sm:h-[185px] lg:h-[195px] rounded-2xl overflow-hidden border-3 sm:border-4 border-white shadow-2xl group bg-[#542B16]">
                   <img
-                    src="/src/assets/images/dryer_vent_cleaner_unbranded_1794498023203.jpg"
+                    src={dryerVentCleanerImg}
                     alt="Dryer Vent Cleaning and Lint Clearing"
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     loading="eager"
@@ -173,7 +177,7 @@ export const Hero: React.FC<HeroProps> = ({ onBookClick }) => {
                 {/* Image 3: HVAC System Cleaning (Unbranded Uniform) */}
                 <div className="relative w-full h-[140px] xs:h-[165px] sm:h-[185px] lg:h-[195px] rounded-2xl overflow-hidden border-3 sm:border-4 border-white shadow-2xl group bg-[#542B16]">
                   <img
-                    src="/src/assets/images/hvac_cleaner_unbranded_1794498024504.jpg"
+                    src={hvacCleanerImg}
                     alt="HVAC Coil and Blower Deep Cleaning"
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     loading="eager"
