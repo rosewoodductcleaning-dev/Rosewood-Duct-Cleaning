@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Clock, ChevronDown, Check, Sparkles } from 'lucide-react';
+import { useScrollLock } from '../utils/scrollLock';
 
 interface TimePickerProps {
   id?: string;
@@ -51,18 +52,27 @@ export const TimePicker: React.FC<TimePickerProps> = ({
     }
   }, [value]);
 
-  // Close when clicking outside
+  useScrollLock(isOpen);
+
+  // Close when clicking outside or pressing Escape
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
     };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsOpen(false);
+      }
+    };
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
+      window.addEventListener('keydown', handleKeyDown);
     }
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen]);
 
@@ -156,7 +166,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 
       {/* Interactive Time Selection Popover */}
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 sm:right-auto sm:w-[320px] mt-2 bg-[#FFFDF9] rounded-2xl border-2 border-[#75401F]/20 shadow-2xl p-4 z-50 animate-in fade-in zoom-in-95 duration-150">
+        <div className="absolute top-full left-0 right-0 sm:right-auto sm:w-[320px] mt-2 bg-[#FFFDF9] rounded-2xl border-2 border-[#75401F]/20 shadow-2xl p-4 z-50 animate-in fade-in zoom-in-95 duration-150 overscroll-contain">
           
           {/* Top Digital Display & AM/PM Switcher */}
           <div className="flex items-center justify-between pb-3 border-b border-[#75401F]/15 mb-3">

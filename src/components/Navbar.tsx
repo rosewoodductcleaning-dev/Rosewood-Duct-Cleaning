@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, ChevronDown, Wind, Flame, Fan, Home, ArrowRight, Sparkles } from 'lucide-react';
 import { ServiceType } from '../types';
+import { useScrollLock } from '../utils/scrollLock';
 
 interface NavbarProps {
   onOpenBooking: () => void;
@@ -53,17 +54,22 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onNavigate, onSel
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Prevent background scroll when mobile menu is open
+  // Close menus on Escape key
   useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
+    if (!mobileMenuOpen && !servicesDropdownOpen && !areasDropdownOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false);
+        setServicesDropdownOpen(false);
+        setAreasDropdownOpen(false);
+      }
     };
-  }, [mobileMenuOpen]);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [mobileMenuOpen, servicesDropdownOpen, areasDropdownOpen]);
+
+  // Lock background scroll cleanly while mobile or navigation dropdown menu is open
+  useScrollLock(mobileMenuOpen || servicesDropdownOpen || areasDropdownOpen);
 
   const serviceOptions: { name: ServiceType; desc: string; icon: React.ReactNode }[] = [
     { name: 'Air Duct Cleaning', desc: 'Whole-home ventilation sanitization', icon: <Wind className="w-4 h-4 text-[#D94D78]" /> },
@@ -86,7 +92,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onNavigate, onSel
     setMobileMenuOpen(false);
     setServicesDropdownOpen(false);
     setAreasDropdownOpen(false);
-    onNavigate(id);
+    requestAnimationFrame(() => {
+      onNavigate(id);
+    });
   };
 
   const handleServiceSelect = (serviceName: ServiceType) => {
@@ -317,7 +325,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, onNavigate, onSel
 
         {/* ================= MOBILE FLOATING DROPDOWN PANEL ================= */}
         {mobileMenuOpen && (
-          <div className="pointer-events-auto md:hidden w-full max-w-sm mt-2 bg-[#542B16]/98 backdrop-blur-2xl border border-white/20 rounded-3xl shadow-2xl p-4 animate-in fade-in slide-in-from-top-2 duration-200 text-white">
+          <div className="pointer-events-auto md:hidden w-full max-w-sm mt-2 max-h-[calc(100vh-5.5rem)] overflow-y-auto overscroll-contain no-scrollbar bg-[#542B16]/98 backdrop-blur-2xl border border-white/20 rounded-3xl shadow-2xl p-4 animate-in fade-in slide-in-from-top-2 duration-200 text-white">
             <nav className="flex flex-col gap-1.5">
               
               <div className="flex items-center justify-between pb-2 mb-1 border-b border-white/10">

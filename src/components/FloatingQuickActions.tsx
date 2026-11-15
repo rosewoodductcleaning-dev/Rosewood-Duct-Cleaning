@@ -12,6 +12,7 @@ import {
   Calendar,
   ArrowUp,
 } from 'lucide-react';
+import { useScrollLock } from '../utils/scrollLock';
 
 interface FloatingQuickActionsProps {
   onNavigate: (sectionId: string) => void;
@@ -24,6 +25,8 @@ export const FloatingQuickActions: React.FC<FloatingQuickActionsProps> = ({
 }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  useScrollLock(menuOpen);
 
   // Close menu when clicking outside or pressing Escape
   useEffect(() => {
@@ -52,7 +55,9 @@ export const FloatingQuickActions: React.FC<FloatingQuickActionsProps> = ({
 
   const handleSelectSection = (sectionId: string) => {
     setMenuOpen(false);
-    onNavigate(sectionId);
+    requestAnimationFrame(() => {
+      onNavigate(sectionId);
+    });
   };
 
   const handleBookNow = () => {
@@ -62,7 +67,9 @@ export const FloatingQuickActions: React.FC<FloatingQuickActionsProps> = ({
 
   const handleBackToTop = () => {
     setMenuOpen(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   };
 
   const navItems = [
@@ -85,7 +92,7 @@ export const FloatingQuickActions: React.FC<FloatingQuickActionsProps> = ({
         <div
           role="menu"
           aria-label="Quick Navigation Menu"
-          className="pointer-events-auto absolute right-full mr-2.5 sm:mr-3 w-56 sm:w-60 max-w-[calc(100vw-5rem)] max-h-[68vh] overflow-y-auto no-scrollbar bg-[#FFFDF9]/98 backdrop-blur-xl rounded-2xl border border-[#75401F]/20 shadow-2xl p-2.5 animate-in fade-in zoom-in-95 slide-in-from-right-2 duration-150"
+          className="pointer-events-auto absolute right-full mr-2.5 sm:mr-3 w-56 sm:w-60 max-w-[calc(100vw-5rem)] max-h-[68vh] overflow-y-auto overscroll-contain no-scrollbar bg-[#FFFDF9]/98 backdrop-blur-xl rounded-2xl border border-[#75401F]/20 shadow-2xl p-2.5 animate-in fade-in zoom-in-95 slide-in-from-right-2 duration-150"
         >
           {/* Header with Small Close Icon */}
           <div className="flex items-center justify-between px-2.5 pb-2 mb-1.5 border-b border-[#75401F]/12">

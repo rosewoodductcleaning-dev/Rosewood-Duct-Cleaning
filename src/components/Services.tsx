@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Wind, Flame, Fan, Home, ArrowUpRight, CheckCircle2, Info, X, Shield, Clock, Wrench } from 'lucide-react';
 import { ServiceType } from '../types';
+import { useScrollLock } from '../utils/scrollLock';
 import airDuctCleanerImg from '../assets/images/air_duct_cleaner_unbranded_1794498022677.jpg';
 import dryerVentCleanerImg from '../assets/images/dryer_vent_cleaner_unbranded_1794498023203.jpg';
 import hvacCleanerImg from '../assets/images/hvac_cleaner_unbranded_1794498024504.jpg';
@@ -31,16 +32,19 @@ interface ServiceCardData {
 export const Services: React.FC<ServicesProps> = ({ onSelectService }) => {
   const [activeModal, setActiveModal] = useState<ServiceCardData | null>(null);
 
-  // Prevent background scroll when modal is open
+  // Lock background scroll cleanly while service modal is open
+  useScrollLock(Boolean(activeModal));
+
+  // Close service modal on Escape key
   useEffect(() => {
-    if (activeModal) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
+    if (!activeModal) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setActiveModal(null);
+      }
     };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [activeModal]);
 
   const serviceCards: ServiceCardData[] = [
@@ -300,8 +304,17 @@ export const Services: React.FC<ServicesProps> = ({ onSelectService }) => {
 
       {/* ================= DETAILED SERVICE MODAL (Mobile-Optimized) ================= */}
       {activeModal && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/65 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white rounded-t-3xl sm:rounded-3xl max-w-2xl w-full max-h-[88vh] sm:max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl border-t-2 sm:border-2 border-[#75401F]/20 p-5 sm:p-8 relative animate-in slide-in-from-bottom-4 sm:zoom-in-95 duration-200">
+        <div
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/65 backdrop-blur-sm animate-in fade-in duration-200 overscroll-contain"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setActiveModal(null);
+            }
+          }}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="bg-white rounded-t-3xl sm:rounded-3xl max-w-2xl w-full max-h-[88vh] sm:max-h-[90vh] overflow-y-auto overscroll-contain no-scrollbar shadow-2xl border-t-2 sm:border-2 border-[#75401F]/20 p-5 sm:p-8 relative animate-in slide-in-from-bottom-4 sm:zoom-in-95 duration-200">
             
             {/* Close Button (Touch Friendly) */}
             <button

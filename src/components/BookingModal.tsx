@@ -3,6 +3,7 @@ import { X, Calendar, Clock, MapPin, Phone, User, Wrench, MessageSquare, CheckCi
 import { ServiceType } from '../types';
 import { TimePicker } from './TimePicker';
 import { ensureEmailJSInitialized, submitBookingViaEmailJS } from '../services/emailBookingService';
+import { useScrollLock } from '../utils/scrollLock';
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -51,16 +52,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     }
   }, [isOpen, initialService, initialAddress]);
 
-  // Lock background scrolling while modal is open
-  useEffect(() => {
-    if (isOpen) {
-      const originalStyle = window.getComputedStyle(document.body).overflow;
-      document.body.style.overflow = 'hidden';
-      return () => {
-        document.body.style.overflow = originalStyle;
-      };
-    }
-  }, [isOpen]);
+  // Lock background scrolling cleanly while modal is open
+  useScrollLock(isOpen);
 
   // Close on Escape key
   useEffect(() => {
@@ -209,7 +202,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200 overscroll-contain"
       onClick={(e) => {
         if (e.target === e.currentTarget) {
           onClose();
@@ -250,7 +243,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
         </div>
 
         {/* Modal Body / Scrollable Content Area */}
-        <div className="flex-1 overflow-y-auto no-scrollbar p-6 sm:p-8 bg-[#FAF6F0]">
+        <div className="flex-1 overflow-y-auto overscroll-contain no-scrollbar p-6 sm:p-8 bg-[#FAF6F0]">
           {isSubmitted ? (
             /* ================= SUCCESS STATE ================= */
             <div className="text-center py-4 sm:py-6 space-y-5 animate-in fade-in duration-300">
